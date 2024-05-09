@@ -33,3 +33,13 @@ Thu 09 May 2024 04:06:17 PM UTC:
  tests:  8|5
 total_score: 15/70
 613f280
+Thu 09 May 2024 04:07:36 PM UTC: 
+ treemap.c | 53 ++++++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
+In file included from test.c:4:
+treemap.c:92:10: error: ‘removeNode’ defined but not used [-Werror=unused-function]
+   92 |     void removeNode(TreeMap *tree, TreeNode *node) {
+      |          ^~~~~~~~~~
+cc1: all warnings being treated as errors
+Compilation failed
+4e728b5

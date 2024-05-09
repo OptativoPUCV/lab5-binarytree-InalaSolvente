@@ -88,7 +88,58 @@ TreeNode *minimum(TreeNode *x) {
     return z;
 }
 
-void removeNode(TreeMap *tree, TreeNode *node) {}
+void removeNode(TreeMap *tree, TreeNode *node) {
+    void removeNode(TreeMap *tree, TreeNode *node) {
+        if (tree == NULL || node == NULL)
+            return;
+
+        // Caso 1: El nodo no tiene hijos
+        if (node->left == NULL && node->right == NULL) {
+            if (node->parent == NULL) {
+                // El nodo es la raíz del árbol
+                tree->root = NULL;
+            } else {
+                // El nodo es un hijo, se debe actualizar el puntero del padre
+                if (node->parent->left == node) {
+                    node->parent->left = NULL;
+                } else {
+                    node->parent->right = NULL;
+                }
+            }
+            free(node->pair); // Liberar el par clave-valor
+            free(node);       // Liberar el nodo
+        }
+        // Caso 2: El nodo tiene un solo hijo
+        else if (node->left == NULL || node->right == NULL) {
+            TreeNode *child = (node->left != NULL) ? node->left : node->right;
+
+            if (node->parent == NULL) {
+                // El nodo es la raíz del árbol
+                tree->root = child;
+                child->parent = NULL;
+            } else {
+                // El nodo es un hijo, se debe actualizar el puntero del padre
+                if (node->parent->left == node) {
+                    node->parent->left = child;
+                } else {
+                    node->parent->right = child;
+                }
+                child->parent = node->parent;
+            }
+            free(node->pair); // Liberar el par clave-valor
+            free(node);       // Liberar el nodo
+        }
+        // Caso 3: El nodo tiene dos hijos
+        else {
+            TreeNode *successor = minimum(node->right);
+            // Copiar los datos del sucesor al nodo a eliminar
+            node->pair = successor->pair;
+            // Eliminar el sucesor recursivamente
+            removeNode(tree, successor);
+        }
+    }
+
+}
 
 void eraseTreeMap(TreeMap *tree, void *key) {
   if (tree == NULL || tree->root == NULL)
