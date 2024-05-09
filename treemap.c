@@ -70,8 +70,12 @@ void insertTreeMap(TreeMap *tree, void *key, void *value) {
     parent = current;
     if (tree->lower_than(newNode->pair->key, current->pair->key) < 0) {
       current = current->left;
-    } else {
+    } else if (tree->lower_than(newNode->pair->key, current->pair->key) > 0) {
       current = current->right;
+    } else {
+      // Clave duplicada, manejar según sea necesario
+      free(newNode);
+      return; // O puedes decidir qué hacer con duplicados
     }
   }
 
@@ -81,8 +85,6 @@ void insertTreeMap(TreeMap *tree, void *key, void *value) {
   } else {
     parent->right = newNode;
   }
-  current = tree->root;
-  parent = NULL;
 }
 
 TreeNode *minimum(TreeNode *x) { return NULL; }
