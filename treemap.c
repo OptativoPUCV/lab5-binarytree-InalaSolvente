@@ -48,43 +48,47 @@ TreeMap *createTreeMap(int (*lower_than)(void *key1, void *key2)) {
   return map;
 }
 
-void insertTreeMap(TreeMap *tree, void *key, void *value) {
-  TreeNode *newNode = createTreeNode(key, value);
-  if (newNode == NULL) {
-    // Manejar el error de asignación de memoria
-    return;
-  }
-
-  // Si el árbol está vacío, el nuevo nodo se convierte en la raíz
-  if (tree->root == NULL) {
-    tree->root = newNode;
-    return;
-  }
-
-  TreeNode *current = tree->root;
-  TreeNode *parent = NULL;
-
-  // Recorrer el árbol para encontrar la posición adecuada para insertar el
-  // nuevo nodo
-  while (current != NULL) {
-    parent = current;
-    if (tree->lower_than(newNode->pair->key, current->pair->key) < 0) {
-      current = current->left;
-    } else if (tree->lower_than(newNode->pair->key, current->pair->key) > 0) {
-      current = current->right;
-    } else {
-      // Clave duplicada, manejar según sea necesario
-      free(newNode);
-      return; // O puedes decidir qué hacer con duplicados
+void insertTreeMap(TreeMap * tree, void* key, void * value) 
+{
+    if (tree == NULL || key == NULL || value == NULL) return;
+    if (tree->root == NULL)
+    {
+        tree->root = createTreeNode(key ,value);
     }
-  }
-
-  // Insertar el nuevo nodo como hijo del nodo adecuado
-  if (tree->lower_than(newNode->pair->key, parent->pair->key) < 0) {
-    parent->left = newNode;
-  } else {
-    parent->right = newNode;
-  }
+    else
+    {
+        TreeNode * aux = tree->root;
+        while (aux != NULL)
+            {
+                if (is_equal(tree, key, aux->pair->key))
+                {
+                    return;
+                }
+                else
+                {
+                    if (tree->lower_than(key, aux->pair->key) == 1)
+                    {
+                        if (aux->left == NULL)
+                        {
+                            aux->left = createTreeNode(key, value);
+                            aux->left->parent = aux;
+                            tree->current = aux->left;
+                        }
+                        aux = aux->left;
+                    }
+                    else
+                    {
+                        if (aux->right == NULL)
+                        {
+                            aux->right = createTreeNode(key, value);
+                            aux->right->parent = aux;
+                            tree->current = aux->right;
+                        }
+                        aux = aux->right;
+                    }
+                }
+            }
+    }
 }
 
 TreeNode *minimum(TreeNode *x) { return NULL; }
