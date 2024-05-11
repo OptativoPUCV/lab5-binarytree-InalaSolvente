@@ -132,4 +132,4 @@ Pair *nextTreeMap(TreeMap *tree) {
   TreeNode *aux = tree->current;
   if(aux->right != NULL) aux = aux->right;
   else aux = aux->parent;
-  return aux; }
+  return aux->pair; }
