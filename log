@@ -61,3 +61,14 @@ Thu 09 May 2024 04:14:40 PM UTC:
  tests:  17|3
 total_score: 30/70
 9332435
+Sat 11 May 2024 10:30:07 PM UTC: 
+ treemap.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+In file included from test.c:4:
+treemap.c: In function ‘nextTreeMap’:
+treemap.c:135:10: error: returning ‘TreeNode *’ from a function with incompatible return type ‘Pair *’ [-Werror=incompatible-pointer-types]
+  135 |   return aux; }
+      |          ^~~
+cc1: all warnings being treated as errors
+Compilation failed
+a2e450a

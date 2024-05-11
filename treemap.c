@@ -127,4 +127,9 @@ Pair *firstTreeMap(TreeMap *tree) {
     return aux->pair;
 }
 
-Pair *nextTreeMap(TreeMap *tree) { return NULL; }
+Pair *nextTreeMap(TreeMap *tree) { 
+  if (tree == NULL) return NULL;
+  TreeNode *aux = tree->current;
+  if(aux->right != NULL) aux = aux->right;
+  else aux = aux->parent;
+  return aux; }
