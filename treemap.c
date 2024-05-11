@@ -112,10 +112,10 @@ void removeNode(TreeMap *tree, TreeNode *node) {
     if (node->parent != NULL) {
       if (node->parent->left == node)
         node->parent->left = child;
-      else
+      else{
         node->parent->right = child;
-      child->parent = node->parent;
-    } else {
+      child->parent = node->parent; }
+    }else {
       // Si el nodo a eliminar es la raíz
       tree->root = child;
       child->parent = NULL;
