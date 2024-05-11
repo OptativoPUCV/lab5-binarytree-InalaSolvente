@@ -135,6 +135,6 @@ Pair *nextTreeMap(TreeMap *tree) {
     while(aux->left != NULL) aux = aux->left;
   }
   else{
-    while (aux->parent->pair->value < aux->pair->value) aux = aux->parent;
+    while (aux->parent != NULL && aux->parent->pair->value < aux->pair->value) aux = aux->parent;
   }
   return aux->pair; }
