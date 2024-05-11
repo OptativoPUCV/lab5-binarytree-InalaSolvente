@@ -139,4 +139,5 @@ Pair *nextTreeMap(TreeMap *tree) {
   else{
     while (aux->parent != NULL && tree->lower_than(aux->pair->value, aux->parent->pair->value)) aux = aux->parent;
   }
+  tree->current = aux;
   return aux->pair; }
