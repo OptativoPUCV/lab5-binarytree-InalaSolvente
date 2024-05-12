@@ -170,7 +170,31 @@ Pair *searchTreeMap(TreeMap *tree, void *key) {
     }
     return NULL; }
 
-Pair *upperBound(TreeMap *tree, void *key) { return NULL; }
+Pair *upperBound(TreeMap *tree, void *key) {
+    if (tree == NULL || tree->root == NULL || key == NULL)
+        return NULL;
+
+    TreeNode *aux = tree->root;
+    TreeNode *result = NULL;
+
+    while (aux != NULL) {
+        // Si la clave del nodo actual es mayor o igual a la clave dada
+        if (!tree->lower_than(aux->pair->key, key)) {
+            // Actualizamos el resultado y continuamos buscando en el subárbol izquierdo
+            result = aux;
+            aux = aux->left;
+        } else {
+            // Si la clave del nodo actual es menor que la clave dada, avanzamos al subárbol derecho
+            aux = aux->right;
+        }
+    }
+
+    if (result != NULL)
+        return result->pair; // Retornamos el par clave-valor del nodo encontrado
+    else
+        return NULL; // Si no se encuentra ningún nodo mayor o igual a la clave dada, retornamos NULL
+}
+
 
 Pair *firstTreeMap(TreeMap *tree) { 
     TreeNode *aux = tree->root;
