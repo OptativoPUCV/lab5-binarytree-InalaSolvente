@@ -88,47 +88,59 @@ TreeNode *minimum(TreeNode *x) {
   return z;
 }
 
-void removeNode(TreeMap *tree, TreeNode *node) {
-    if (tree == NULL || node == NULL)
-        return;
+void removeNode(TreeMap * tree, TreeNode* node) {
+  if (node == NULL)
+    return;
 
-    TreeNode *parent = node->parent;
-
-    // Caso 1: El nodo es una hoja
-    if (node->left == NULL && node->right == NULL) {
-        if (parent != NULL) {
-            if (parent->left == node)
-                parent->left = NULL;
-            else
-                parent->right = NULL;
-        } else {
-            tree->root = NULL; // El nodo es la raíz
-        }
-        free(node->pair);
-        free(node);
-    }
-    // Caso 2: El nodo tiene solo un hijo
-    else if (node->left == NULL || node->right == NULL) {
-        TreeNode *child = (node->left != NULL) ? node->left : node->right;
-        if (parent != NULL) {
-            if (parent->left == node)
-                parent->left = child;
-            else
-                parent->right = child;
-        } else {
-            tree->root = child; // El nodo es la raíz
-        }
-        if (child != NULL)
-            child->parent = parent;
-        free(node->pair);
-        free(node);
-    }
-    // Caso 3: El nodo tiene dos hijos
+  if (node->left == NULL && node->right == NULL) {
+    if (node->parent == NULL) {
+      // Si el nodo es la raíz
+      tree->root = NULL;
+    } 
     else {
-        TreeNode *successor = minimum(node->right); // Encontrar el sucesor
-        node->pair = successor->pair; // Copiar el par de clave-valor del sucesor al nodo actual
-        removeNode(tree, successor); // Eliminar el sucesor
+    // Eliminar referencia del padre al nodo
+      if (node->parent->left == node)
+        node->parent->left = NULL;
+      else
+        node->parent->right = NULL;
     }
+    free(node); // Liberar memoria del nodo
+    return;
+  }
+
+  // Caso 2: El nodo tiene un solo hijo
+  if (node->left == NULL || node->right == NULL) {
+    TreeNode* child = (node->left != NULL) ? node->left : node->right;
+
+    // Actualizar el padre del hijo
+    child->parent = node->parent;
+
+    // Actualizar la raíz si es necesario
+    if (node->parent == NULL)
+      tree->root = child;
+    else {
+      // Actualizar la referencia del padre al hijo
+      if (node->parent->left == node)
+        node->parent->left = child;
+      else
+        node->parent->right = child;
+    }
+
+    free(node); // Liberar memoria del nodo
+    return;
+  }
+
+  // Caso 3: El nodo tiene dos hijos
+  // En este caso, necesitas encontrar el sucesor en orden del nodo para reemplazarlo.
+  TreeNode* successor = node->right;
+  while (successor->left != NULL)
+    successor = successor->left;
+
+  // Copiar el par del sucesor al nodo que se está eliminando
+  node->pair = successor->pair;
+
+  // Eliminar el sucesor recursivamente
+  removeNode(tree, successor);
 }
 
 
