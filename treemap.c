@@ -89,54 +89,46 @@ TreeNode *minimum(TreeNode *x) {
 }
 
 void removeNode(TreeMap *tree, TreeNode *node) {
-  if (tree == NULL || node == NULL)
-    return;
+    if (tree == NULL || node == NULL)
+        return;
 
-  TreeNode *parent = node->parent;
+    TreeNode *parent = node->parent;
 
-  // Caso 1: Nodo sin hijos
-  if (node->left == NULL && node->right == NULL) {
-    if (parent != NULL) {
-      if (parent->left == node)
-        parent->left = NULL;
-      else
-        parent->right = NULL;
-    } else {
-      // Si el nodo a eliminar es la raíz
-      tree->root = NULL;
+    // Caso 1: El nodo es una hoja
+    if (node->left == NULL && node->right == NULL) {
+        if (parent != NULL) {
+            if (parent->left == node)
+                parent->left = NULL;
+            else
+                parent->right = NULL;
+        } else {
+            tree->root = NULL; // El nodo es la raíz
+        }
+        free(node->pair);
+        free(node);
     }
-    free(node->pair);
-    free(node);
-  }
-  // Caso 2: Nodo con un solo hijo
-  else if (node->left == NULL || node->right == NULL) {
-    TreeNode *child = (node->left != NULL) ? node->left : node->right;
-    if (parent != NULL) {
-      if (parent->left == node)
-        parent->left = child;
-      else
-        parent->right = child;
-      child->parent = parent;
-    } else {
-      // Si el nodo a eliminar es la raíz
-      tree->root = child;
-      if (child != NULL)
-        child->parent = NULL;
+    // Caso 2: El nodo tiene solo un hijo
+    else if (node->left == NULL || node->right == NULL) {
+        TreeNode *child = (node->left != NULL) ? node->left : node->right;
+        if (parent != NULL) {
+            if (parent->left == node)
+                parent->left = child;
+            else
+                parent->right = child;
+        } else {
+            tree->root = child; // El nodo es la raíz
+        }
+        if (child != NULL)
+            child->parent = parent;
+        free(node->pair);
+        free(node);
     }
-    free(node->pair);
-    free(node);
-  }
-  // Caso 3: Nodo con dos hijos
-  else {
-    // Encontrar el sucesor inmediato
-    TreeNode *successor = minimum(node->right);
-
-    // Copiar el par de clave-valor del sucesor al nodo actual
-    node->pair = successor->pair;
-
-    // Eliminar el sucesor (puede ser un nodo con 0 o 1 hijo)
-    removeNode(tree, successor);
-  }
+    // Caso 3: El nodo tiene dos hijos
+    else {
+        TreeNode *successor = minimum(node->right); // Encontrar el sucesor
+        node->pair = successor->pair; // Copiar el par de clave-valor del sucesor al nodo actual
+        removeNode(tree, successor); // Eliminar el sucesor
+    }
 }
 
 
